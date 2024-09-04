@@ -2,7 +2,9 @@
 
 ## Objetivo:
 
-Esse projeto tem o intuito de facilitar a criação de cards para o software de memorização Anki. O Anki Notes Creator cria cards de maneira automática a partir de um arquivo de texto apenas com as palavras alvo desejadas. **Os cards são criados com a palavra e uma frase de exemplo na frente, e a tradução de ambas na parte de trás junto com a pronúncia de cada ideograma e links para dicionários online para a palavra.**
+Esse projeto tem o intuito de facilitar a criação de cards para o software de memorização Anki. O Anki Notes Creator cria cards de maneira automática a partir de um arquivo de texto apenas com as palavras alvo desejadas. **A partir apenas da palavra desejada, os cards são criados com a palavra e uma frase de exemplo na frente, e a tradução de ambas na parte de trás junto com a pronúncia de cada ideograma e links para dicionários online para a palavra.**
+![Frente](card_front.png)
+![Verso](card_back.png)
 
 ### Requerimentos:
 
