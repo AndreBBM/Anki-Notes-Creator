@@ -7,24 +7,25 @@ import re
 from lib import *
 
 
-invoke('createDeck', deck='test1')
+def main():
+    invoke('createDeck', deck='test1')
 
-expression = ''        # この文は例えばです
-reading = ''          # この文[ぶん]は例えば[たとえば]です
-sentence_kana = ''   # このぶんはたとえばです
-sentence_en = ''    # This sentence is an example
+    expression = ''        # この文は例えばです
+    reading = ''          # この文[ぶん]は例えば[たとえば]です
+    sentence_kana = ''   # このぶんはたとえばです
+    sentence_en = ''    # This sentence is an example
 
-get_definition('おもてなし')
+    get_definition('おもてなし')
 
-deck_name = "test1"
-kanjis = read_words()
-for kanji in kanjis:
-    expression, reading, sentence_kana, sentence_en = get_japanese_sentence(kanji)
+    deck_name = "test1"
+    kanjis = read_words()
+    for kanji in kanjis:
+        expression, reading, sentence_kana, sentence_en = get_japanese_sentence(kanji)
 
-    leitura, definicoes = get_definition(kanji)
+        leitura, definicoes = get_definition(kanji)
 
-    try:
-        invoke('addNote',
+        try:
+            invoke('addNote',
             note={
                 "deckName": deck_name,
                 "modelName": "Core 2000",
@@ -51,10 +52,13 @@ for kanji in kanjis:
             }
         )
 
-        print("Adicionada a palavra " + kanji + " ao deck " + deck_name)
-    except Exception as e:
-        print(e)
-        print("Erro ao adicionar o kanji " + kanji + " ao deck")
-        continue
+            print("Adicionada a palavra " + kanji + " ao deck " + deck_name)
+        except Exception as e:
+            print(e)
+            print("Erro ao adicionar o kanji " + kanji + " ao deck")
+            continue
+
+if __name__ == "__main__":
+    main()
 
 
