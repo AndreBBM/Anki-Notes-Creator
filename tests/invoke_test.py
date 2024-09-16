@@ -39,6 +39,7 @@ class TestInvokeFunction(unittest.TestCase):
 
     @patch('urllib.request.urlopen')
     def test_invoke_missing_result_field(self, mock_urlopen):
+        # This one will never succed because in the current implementation, the unexpected number of fields will be raised first
         # Mock a response missing the 'result' field
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps({'error': None}).encode('utf-8')
