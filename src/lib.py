@@ -12,7 +12,7 @@ katakana_full = r'[=-ヿ]'
 
 # Read "add_words.txt" and return a list of words without the newline character
 def read_words():
-    with open("add_words.txt", "r") as f:
+    with open("src/add_words.txt", "r", encoding="utf-8") as f:
         words = f.readlines()
     words = [x.strip() for x in words]
     return words

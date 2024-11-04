@@ -18,7 +18,8 @@ https://foosoft.net/projects/anki-connect/
 
 ### How to use:
 
-With Anki open, import the "card_model.apkg" deck included in this repository. The deck can be deleted after importing; it only serves to create a correct card template.
+With Anki open, double click on "card_model.apkg" to import the necessary card model into anki. The deck can be deleted after importing; it only serves to create a correct card template.  
+Run ``` pip install -r /path/to/requirements.txt ``` to install the necessary libraries.  
 Next, run the "main.py" file. It will create a test deck "test1" and add the words from the "add_words.txt" file as cards.
 To add your words to your deck, simply change the "deck_name" variable to the name of your deck and add the words to the "add_words.txt" file.
 
@@ -32,7 +33,7 @@ word3
 ...
 ```
 
-## Português
+# Português
 
 ## Objetivo:
 
@@ -52,7 +53,8 @@ https://foosoft.net/projects/anki-connect/
 
 ### Como usar:
 
-Com o anki aberto, importe o deck "card_model.apkg" que está incluido neste repositório. O deck pode ser deletado após a importação, ele serve apenas para criar um modelo correto de card.
+Com o anki aberto, clique em "card_model.apkg" para importar o modelo de card necessário. O deck pode ser deletado após a importação, ele serve apenas para criar um modelo correto de card.
+Execute ``` pip install -r /path/to/requirements.txt ``` para instalar as bibliotecas necessárias.  
 Em seguida, execute o arquivo "main.py". Ele criará um deck de teste "test1" e adicionará as palavras do arquivo "add_words.txt" como cards.
 Para utilizar adicionar as suas palavras ao seu deck, basta mudar a variável "deck_name" para o nome do seu deck e adicionar as palavras no arquivo "add_words.txt".
 
