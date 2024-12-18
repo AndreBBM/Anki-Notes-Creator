@@ -6,21 +6,19 @@ import urllib.request
 import re
 from lib import *
 
+# remover comentários inuteis e traduzir para inglês
+# atualizar o README.md
 
 def main():
-    invoke('createDeck', deck='test1')
+    #invoke('deleteDecks', decks='test1', cardsToo=True)
+    invoke('createDeck', deck='Core 2000')
 
-    expression = ''        # この文は例えばです
-    reading = ''          # この文[ぶん]は例えば[たとえば]です
-    sentence_kana = ''   # このぶんはたとえばです
-    sentence_en = ''    # This sentence is an example
-
-    get_definition('おもてなし')
-
-    deck_name = "test1"
+    deck_name = "Core 2000"         # Deck in which the cards will be added
+    best_sentence_length = 1    # Use the shortest sentence as default
+    
     kanjis = read_words()
     for kanji in kanjis:
-        expression, reading, sentence_kana, sentence_en = get_japanese_sentence(kanji)
+        expression, reading, sentence_kana, sentence_en = get_japanese_sentence(kanji, best_sentence_length)
 
         leitura, definicoes = get_definition(kanji)
 

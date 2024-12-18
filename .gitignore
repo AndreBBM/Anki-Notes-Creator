@@ -1,3 +1,6 @@
 
 /.venv
 *.pyc
+src/__pycache__
+src/raw.txt
+src/processing.py

@@ -14,7 +14,7 @@ katakana_full = r'[=-ヿ]'
 def read_words():
     with open("src/add_words.txt", "r", encoding="utf-8") as f:
         words = f.readlines()
-    words = [x.strip() for x in words]
+    words = [x.strip() for x in words if x.strip() != ""]
     return words
 
 # source: https://github.com/olsgaard/Japanese_nlp_scripts/blob/master/jp_regex.py
@@ -44,13 +44,20 @@ def remove_unicode_block(unicode_block, string):    # remove all characters from
 def extract_unicode_block(unicode_block, string):   # extract all characters from a unicode block
     return re.findall(unicode_block, string)
 
-def get_japanese_sentence(kanji):
+def get_japanese_sentence(kanji, best_sentence_length = 1):
     linkpage = f'https://jisho.org/search/{kanji}%20%23sentences'
     page = requests.get(linkpage, headers={'User-Agent': 'Mozilla/5.0'})
     soup = BeautifulSoup(page.content, 'html.parser')
     sentences = soup.find_all('div', class_='sentence_content')
     sentence_size = 1e9
-    best_sentence_length = 20
+
+    expression = ''        # この文は例えばです
+    reading = ''          # この文[ぶん]は例えば[たとえば]です
+    sentence_kana = ''   # このぶんはたとえばです
+    sentence_en = ''    # This sentence is an example
+
+    if len(sentences) == 0:
+        return '', '', '', ''
 
     for i in range(len(sentences)):
         japanese_all_letters = sentences[i].find('ul', class_='japanese_sentence japanese japanese_gothic clearfix')
@@ -81,6 +88,9 @@ def get_japanese_sentence(kanji):
                     reading_possible += word
                     sentence_kana_possible += word
 
+        if kanji not in expression_possible:   # se a palavra não estiver na sentença, pular
+            continue
+
         if abs(len(expression_possible) - best_sentence_length) < sentence_size:   # escolher a sentença mais próxima do tamanho desejado
             expression = expression_possible
             reading = reading_possible
@@ -90,19 +100,6 @@ def get_japanese_sentence(kanji):
 
     return expression, reading, sentence_kana, sentence_en
 
-def get_definition(kanji):
-    link_definition = f'https://jisho.org/search/{kanji}'
-    page_definition = requests.get(link_definition, headers={'User-Agent': 'Mozilla/5.0'})
-    soup_definition = BeautifulSoup(page_definition.content, 'html.parser')
-    if soup_definition.find('div', class_='concept_light clearfix') == None:
-        print(f'It wasnt possible to find a definition for {kanji}')
-        return None, None
-
-    first_definition = soup_definition.find('div', class_='concept_light clearfix')
-    definition = first_definition.find('div', class_='meaning-definition zero-padding').find_all('span', class_='meaning-meaning')
-    various_definitions = first_definition.find_all('div', class_='meaning-wrapper')
-    leituras = first_definition.find_all('span', class_='furigana')
-    definition = definition[0].get_text().split(';')
 
 def get_definition(kanji):
     link_definition = f'https://jisho.org/search/{kanji}'
@@ -132,13 +129,19 @@ def get_definition(kanji):
 
     i = 0
     for defini in various_definitions:
+        meaning_meaning = defini.find('span', class_='meaning-meaning')
+
         if defini.find('span', class_='meaning-meaning') == None:
             break
-        definitions_new += defini.find('span', class_='meaning-meaning').get_text() + '/ '
+        
+        if "【" in meaning_meaning.get_text() or "】" in meaning_meaning.get_text():
+            continue
+
+        definitions_new += meaning_meaning.get_text() + "<br>"
         i += 1
         if i == 3:
             break
-    definitions_new = definitions_new[:-2]
+    definitions_new = definitions_new[:-4]
 
     for d in definition:
         definitions.append(d.strip())
@@ -151,7 +154,7 @@ def get_definition(kanji):
             for j in range(len(x)):
                 leitura += x[j].get_text()
 
-    return furigana_separados, definitions_new#definitions
+    return furigana_separados, definitions_new
 
 
 # Format the word with furigana, for the case of words with separated kanjis, as in definitions

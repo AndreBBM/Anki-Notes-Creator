@@ -2,8 +2,14 @@
 
 ## Objective:
 
-This project aims to facilitate the creation of flashcards for the Anki memorization software. The Anki Notes Creator automatically generates cards from a text file containing only the desired target words. **Using just the desired word, the cards are created with the word and an example sentence on the front, and the translation of both on the back, along with the pronunciation of each ideogram and links to online dictionaries for the word.**
+Creates complete and well structured cards for japanese vocabulary in Anki. The Anki Notes Creator automatically generates cards from a text file containing just the desired target words. **Using just the desired word, the notes are created with the word and an example sentence on the front, and the translation of both on the back, along with the pronunciation of each ideogram and links to online dictionaries for the word.**
+
+### Example:  
+
+#### Front:
 ![Front](card_front.png)
+
+#### Back:
 ![Back](card_back.png)
 
 ### Requirements:
@@ -30,40 +36,5 @@ The "add_words.txt" file should be formatted as follows:
 word1
 word2
 word3
-...
-```
-
-# Português
-
-## Objetivo:
-
-Esse projeto tem o intuito de facilitar a criação de cards para o software de memorização Anki. O Anki Notes Creator cria cards de maneira automática a partir de um arquivo de texto apenas com as palavras alvo desejadas. **A partir apenas da palavra desejada, os cards são criados com a palavra e uma frase de exemplo na frente, e a tradução de ambas na parte de trás junto com a pronúncia de cada ideograma e links para dicionários online para a palavra.**
-![Frente](card_front.png)
-![Verso](card_back.png)
-
-### Requerimentos:
-
-Para rodar esse projeto, é necessário que se tenha instalado Anki, em qualquer versão, e o Anki-Connect, com versão compatível com o Anki instalado.
-
-Para instalar o Anki:
-https://apps.ankiweb.net/
-
-Para instalar o Anki-Connect:
-https://foosoft.net/projects/anki-connect/
-
-### Como usar:
-
-Com o anki aberto, clique em "card_model.apkg" para importar o modelo de card necessário. O deck pode ser deletado após a importação, ele serve apenas para criar um modelo correto de card.
-Execute ``` pip install -r /path/to/requirements.txt ``` para instalar as bibliotecas necessárias.  
-Em seguida, execute o arquivo "main.py". Ele criará um deck de teste "test1" e adicionará as palavras do arquivo "add_words.txt" como cards.
-Para utilizar adicionar as suas palavras ao seu deck, basta mudar a variável "deck_name" para o nome do seu deck e adicionar as palavras no arquivo "add_words.txt".
-
-### Observações:
-
-O arquivo "add_words.txt" deve ser formatado da seguinte maneira:
-```txt
-palavra1
-palavra2
-palavra3
 ...
 ```
