@@ -67,17 +67,17 @@ def get_japanese_sentence(kanji, best_sentence_length = 1):
         sentence_en_possible = sentences[i].find('div', class_='english_sentence clearfix').find('span', class_='english').get_text()
 
         for count, l in enumerate(japanese_all_letters):
-            if type(l) is bs4.element.NavigableString:  # Se for uma string solta # if goes wrong change is to ==
+            if type(l) is bs4.element.NavigableString:
                 expression_possible += l
                 reading_possible += l
                 sentence_kana_possible += l
-            elif type(l) is bs4.element.Tag:   # Se for um kanji com leitura # if goes wrong change is to ==
-                if l.find('span', class_='furigana') != None:   # Se tiver furigana
+            elif type(l) is bs4.element.Tag:
+                if l.find('span', class_='furigana') != None:
                     furigana = l.find('span', class_='furigana').get_text()
                     word = l.find('span', class_='unlinked').get_text()
                     expression_possible += word
                     sentence_kana_possible += furigana
-                    if count == 0:  # Unless it's the first word (?)
+                    if count == 0:
                         reading_possible += word + '[' + furigana + ']'
                     else:   # for some reason, there must be a space before the kanji with furigana for Anki to display it correctly
                         # reading_possible += ' ' + word + '[' + furigana + ']'
@@ -88,10 +88,10 @@ def get_japanese_sentence(kanji, best_sentence_length = 1):
                     reading_possible += word
                     sentence_kana_possible += word
 
-        if kanji not in expression_possible:   # se a palavra não estiver na sentença, pular
-            continue
+        #if kanji not in expression_possible:
+        #    continue
 
-        if abs(len(expression_possible) - best_sentence_length) < sentence_size:   # escolher a sentença mais próxima do tamanho desejado
+        if abs(len(expression_possible) - best_sentence_length) < sentence_size:
             expression = expression_possible
             reading = reading_possible
             sentence_kana = sentence_kana_possible
@@ -115,13 +115,18 @@ def get_definition(kanji):
     leituras = first_definition.find_all('span', class_='furigana')
     definition = definition[0].get_text().split(';')
 
-    # place furigana in a list, for the case of words with separated kanjis
     furigana_separados = []
     for l in leituras:
         x = l.find_all('span', class_='kanji')
         if len(x) > 0:
             for j in range(len(x)):
                 furigana_separados.append(x[j].get_text())
+
+        else:
+            x = l.find_all('rt')
+            if len(x) > 0:
+                for j in range(len(x)):
+                    furigana_separados.append(x[j].get_text())
 
     leitura = ""
     definitions = []
@@ -159,7 +164,6 @@ def get_definition(kanji):
 
 # Format the word with furigana, for the case of words with separated kanjis, as in definitions
 # it returns the kanji with the specific furigana; e.g. 片[かた]付[づ]ける
-# and this can be very interesting for the case of words with kanjis separated by hiragana, e.g. 申し込む
 def furigana_parser(word, furigana):
     # assign the first kanji to the first furigana, the second kanji to the second furigana, and so on
     word_furigana = ''

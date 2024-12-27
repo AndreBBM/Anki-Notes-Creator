@@ -2,7 +2,7 @@
 
 ## Objective:
 
-Creates complete and well structured cards for japanese vocabulary in Anki. The Anki Notes Creator automatically generates cards from a text file containing just the desired target words. **Using just the desired word, the notes are created with the word and an example sentence on the front, and the translation of both on the back, along with the pronunciation of each ideogram and links to online dictionaries for the word.**
+Automatically creates complete and well structured cards for japanese vocabulary in Anki and add them to your deck. The Anki Notes Creator automatically generates cards from a text file containing just the desired target words. **Using just the desired word, the notes are created with the word and an example sentence on the front, and the translation of both on the back, along with the pronunciation of each ideogram and links to online dictionaries for the word.**
 
 ### Example:  
 
