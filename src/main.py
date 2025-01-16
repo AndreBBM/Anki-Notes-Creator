@@ -7,7 +7,7 @@ import re
 from lib import *
 
 def main():
-    deck_name = "test1"    
+    deck_name = "Core 2000"    
 
     invoke('createDeck', deck=deck_name)
 

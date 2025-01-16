@@ -38,3 +38,7 @@ word2
 word3
 ...
 ```
+
+### Contributions:
+
+Contributions are welcome! The project still have a lot of issues, so feel free to fork it and make a pull request with your changes or just open an issue with your suggestions.
