@@ -1,21 +1,26 @@
-import bs4
-from bs4 import BeautifulSoup
-import requests
-import json
-import urllib.request
-import re
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from lib import *
 
 def main():
-    deck_name = "Core 2000"    
-
+    deck_name = "Core 2000"
+    
     invoke('createDeck', deck=deck_name)
 
-    best_sentence_length = 1    # Use the shortest sentence as default
+    # Chrome
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-infobars")
+    options.add_experimental_option("excludeSwitches", ["enable-logging"])
     
+    driver = webdriver.Chrome(options=options)
+
     words = read_words()
     for word in words:
-        expression, reading, sentence_kana, sentence_en = get_japanese_sentence(word, best_sentence_length)
+        expression, reading, sentence_kana, sentence_en = get_japanese_sentence_IK(word, best_sentence_length=15, driver=driver)
 
         leitura, definicoes = get_definition(word)
 
@@ -52,6 +57,8 @@ def main():
             print(e)
             print("Error trying to add " + word + " to deck " + deck_name)
             continue
+
+    driver.quit()
 
 if __name__ == "__main__":
     main()

@@ -1,3 +1,10 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import bs4
 from bs4 import BeautifulSoup
 import requests
@@ -74,7 +81,11 @@ def get_japanese_sentence(kanji, best_sentence_length = 1):
             elif type(l) is bs4.element.Tag:
                 if l.find('span', class_='furigana') != None:
                     furigana = l.find('span', class_='furigana').get_text()
-                    word = l.find('span', class_='unlinked').get_text()
+                    word = l.find('span', class_='unlinked')
+                    if word != None:
+                        word = word.get_text()
+                    else:
+                        word = 'error'
                     expression_possible += word
                     sentence_kana_possible += furigana
                     if count == 0:
@@ -99,6 +110,53 @@ def get_japanese_sentence(kanji, best_sentence_length = 1):
             sentence_size = abs(len(expression_possible) - best_sentence_length)
 
     return expression, reading, sentence_kana, sentence_en
+
+
+def get_japanese_sentence_IK(kanji, best_sentence_length=15, driver=None):
+    url = f'https://www.immersionkit.com/dictionary?keyword={kanji}'
+    driver.get(url)
+
+    try:
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.top.aligned.content'))
+        )
+    except TimeoutException:
+        print(f"No sentences found for {kanji}")
+        return '', '', '', ''
+
+    html = driver.page_source
+    soup = BeautifulSoup(html, "html.parser")
+    sentences = soup.find_all('div', class_='top aligned content')
+
+    text_jp = []
+    text_en = []
+
+    for i, sentence in enumerate(sentences):
+        if i % 2 == 0:
+            jp = sentence.find('div', class_='react-contextmenu-wrapper')
+            en = sentence.find('div', class_='description')
+            if jp and en:
+                text_jp.append(jp.text.strip())
+                text_en.append(en.text.strip())
+            if len(text_jp) >= 5:
+                break
+
+    # Selecionar a frase com tamanho mais próximo ao desejado
+    best_index = min(
+        range(len(text_jp)),
+        key=lambda i: abs(len(text_jp[i]) - best_sentence_length)
+    )
+
+    expression = text_jp[best_index]
+    sentence_en = text_en[best_index]
+
+    #print(f"\n✅ Frase escolhida:")
+    #print(f"📗 expression: {expression}")
+    #print(f"📘 reading: {reading}")
+    #print(f"📙 sentence_kana: {sentence_kana}")
+    #print(f"📕 sentence_en: {sentence_en}")
+
+    return expression, expression, expression, sentence_en
 
 
 def get_definition(kanji):

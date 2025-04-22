@@ -4,3 +4,4 @@
 src/__pycache__
 src/raw.txt
 src/processing.py
+src/errors.txt
