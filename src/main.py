@@ -1,66 +1,34 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from lib import *
 
 def main():
-    deck_name = "Core 2000"
-    
+    driver = create_driver()
+    deck_name = "test"
     invoke('createDeck', deck=deck_name)
-
-    # Chrome
-    options = Options()
-    options.add_argument("--headless")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-infobars")
-    options.add_experimental_option("excludeSwitches", ["enable-logging"])
+    new_cards_info = read_words()
     
-    driver = webdriver.Chrome(options=options)
-
-    words = read_words()
-    for word in words:
-        expression, reading, sentence_kana, sentence_en = get_japanese_sentence_IK(word, best_sentence_length=15, driver=driver)
-
-        leitura, definicoes = get_definition(word)
-
+    for card_info in new_cards_info:
         try:
-            invoke('addNote',
-            note={
-                "deckName": deck_name,
-                "modelName": "Core 2000",
-                "fields": {
-                    'Optimized-Voc-Index': word,
-                    'Vocabulary-Kanji': word,
-                    'Vocabulary-Kana': ''.join(leitura),
-                    'Vocabulary-Furigana' : furigana_parser(word, leitura),
-                    'Vocabulary-English': definicoes,
-                    'Expression': expression,
-                    'Reading': reading,
-                    'Sentence-Kana': sentence_kana,
-                    'Sentence-English': sentence_en,
-                },
-                "options": {
-                    "allowDuplicate": False,
-                    "duplicateScope": "deck",
-                    "duplicateScopeOptions": {
-                        "deckName": deck_name,
-                        "checkChildren": False,
-                        "checkAllModels": False
-                    }
-                },
-            }
-        )
+            if card_info[0] == "w": # word card - get a sentence from a database and the word definition from weblio
+                word = card_info[1]
+                expression, reading, sentence_kana, sentence_en = get_japanese_sentence_massif(word, best_sentence_length=25, driver=driver)
+                leitura, definicoes = get_definition_weblio(word)
+                invoke_card_massif(deck_name, word, expression, reading, sentence_kana, sentence_en, leitura, definicoes)
+
+            elif card_info[0] == "s": # simple sentence card - just translate the sentence
+                word = card_info[1]
+                translated = translate_sentence(word, dest='en')
+                invoke_card_simple_sentence(deck_name, word, word, "", "", translated, "", "")
+
+            elif card_info[0] == "sw": # sentence with word card - get the word definition from weblio from a given sentence
+                word = card_info[2]
+                sentence = card_info[1]
+                leitura, definicoes = get_definition_weblio(word)
+                invoke_card_sentence_with_word(deck_name, word, sentence, leitura, definicoes)
 
             print("Added the word " + word + " to deck " + deck_name)
         except Exception as e:
-            print(e)
-            print("Error trying to add " + word + " to deck " + deck_name)
-            continue
-
+            print(f"Error processing word {word}: {e}")
     driver.quit()
 
 if __name__ == "__main__":
     main()
-
-

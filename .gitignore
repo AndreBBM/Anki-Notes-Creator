@@ -5,3 +5,11 @@ src/__pycache__
 src/raw.txt
 src/processing.py
 src/errors.txt
+src/last_read.txt
+src/automated.py
+src/processing_csv.py
+issues.txt
+count_kanji.py
+count_total.py
+Favourites.csv
+add
